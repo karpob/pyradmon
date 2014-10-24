@@ -586,7 +586,7 @@ def get_data(files_to_read, data_vars, selected_channel, data_path_format, all_c
         #print "Returning single channel data dict..."
         return data_dict
 
-def get_data_columns(files_to_read):
+def get_data_columns(files_to_read,pyradmon_config):
     """Returns a dict of the data columns in a file.
 
     Given a list of dicts containing information on files to read, scan
@@ -611,8 +611,8 @@ def get_data_columns(files_to_read):
     
     # Iterate through all of the files!
     for file_to_read in files_to_read:
-        (template_regex, matching_groups) = template_to_regex(data_path_format)
-        field_data = extract_fields_via_template(template_regex, matching_groups, file_to_read["filename"], suppress_warnings)
+        (template_regex, matching_groups) = template_to_regex(pyradmon_config["data_path_format"])
+        field_data = extract_fields_via_template(template_regex, matching_groups, file_to_read["filename"], pyradmon_config["data_suppress_warnings"])
         
         if ("%YEAR4%" in field_data) and ("%MONTH2%" in field_data) and ("%DAY2%" in field_data) and ("%HOUR2%" in field_data):
             date_tag = field_data["%YEAR4%"] + field_data["%MONTH2%"] + field_data["%DAY2%"] + "_" + field_data["%HOUR2%"] + "z"

@@ -134,7 +134,7 @@ def main():
             data_suppress_warnings = False
         
         if parse.verb == "dump":
-            tmp_columns = get_data_columns(en)
+            tmp_columns = get_data_columns(en,pyradmon_config)
             columns = post_data_columns(tmp_columns)
             new_columns = []
             
