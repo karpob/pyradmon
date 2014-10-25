@@ -75,6 +75,17 @@ def save(config_file, pyradmon_config, config_dict):
 base_directory    = "MERRA2/"
 experiment_id     = "d5124_m2_jan91"
 
+# datestr_to_int converts a pyradmon format timestamp (YYYY-MM-DD HHz) to four integers, returning
+# (year, mon, day, hour)
+def datestr_to_int(datestr):
+    return ( int(datestr[:4]) , int(datestr[5:7]) , int(datestr[8:10]) , int(datestr[11:13]) ) 
+
+# datestr_to_datetime converts a pyradmon format timestamp (YYYY-MM-DD HHz) to a datetime 
+# timestamp (YYYY-MM-DD HH:00:00)
+def datestr_to_datetime(datestr):
+    (year, mon, day, hour) = datestr_to_int(datestr)
+    return datetime.datetime(year, mon, day, hour)
+ 
 # postprocess builds 2 variables from current config:
 #   -> the opts dictionary for enumerate.enumerate()
 #   -> data variable list for data.get_data()
@@ -108,17 +119,13 @@ def postprocess_config(pyradmon_config):
     
     if 'data_start_date' in pyradmon_config:#                                       \O/ <<^^^^^^^^^^^^^^^^^^^^^^
         # FORMAT: YYYY-MM-DD HHz                                                     |   ^ yay for alignment!  ^
-        enum_opts_dict['start_year']  = int(pyradmon_config["data_start_date"][:4])#/ \  ^^^^^^^^^^^^^^^^^^^^^^^
-        enum_opts_dict['start_month'] = int(pyradmon_config["data_start_date"][5:7])###
-        enum_opts_dict['start_day']   = int(pyradmon_config["data_start_date"][8:10])###
-        enum_opts_dict['start_hour']  = int(pyradmon_config["data_start_date"][11:13])###
+        (enum_opts_dict['start_year'],  enum_opts_dict['start_month'], enum_opts_dict['start_day'], enum_opts_dict['start_hour']) = \
+            datestr_to_int(pyradmon_config["data_start_date"])        
     
     if 'data_end_date' in pyradmon_config:
         # FORMAT: YYYY-MM-DD HHz
-        enum_opts_dict['end_year']    = int(pyradmon_config["data_end_date"][:4])
-        enum_opts_dict['end_month']   = int(pyradmon_config["data_end_date"][5:7])
-        enum_opts_dict['end_day']     = int(pyradmon_config["data_end_date"][8:10])
-        enum_opts_dict['end_hour']    = int(pyradmon_config["data_end_date"][11:13])
+        (enum_opts_dict['end_year'],  enum_opts_dict['end_month'], enum_opts_dict['end_day'], enum_opts_dict['end_hour']) = \
+            datestr_to_int(pyradmon_config["data_end_date"])
     
     if 'data_instrument_sat' in pyradmon_config:
         enum_opts_dict['instrument_sat'] = pyradmon_config['data_instrument_sat']
