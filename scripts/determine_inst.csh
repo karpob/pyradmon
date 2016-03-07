@@ -1,7 +1,6 @@
 #!/bin/csh -f
 
-set ESMADIR=/gpfsm/dnb02/wrmccart/progress_cvs/GEOSadas-5_13_0
-source $ESMADIR/src/g5_modules loadmodules > /dev/null
+source radmon_process.config
 
 if ( $#argv > 3 || $#argv < 3 ) then
     echo "usage: determine_inst.csh <experiment base directory with diags> <start YYYYMMDD> <end YYYYMMDD>"
@@ -11,6 +10,11 @@ endif
 set dir=$argv[1]
 set startdate=$argv[2]
 set enddate=$argv[3]
+
+unset argv
+setenv argv
+
+source $ESMADIR/src/g5_modules > /dev/null
 
 set curdate=$startdate
 
@@ -26,6 +30,7 @@ end
 
 set init=1
 set cinst=""
+
 
 foreach file (`find $dirs |grep ges`)
     if ($init == 1) then

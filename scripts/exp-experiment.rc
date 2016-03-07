@@ -1,0 +1,13 @@
+pyradmon: /discover/nobackup/wrmccart/pyradmon
+
+expid: x0016_ctl
+expbase: /discover/nobackup/wrmccart/
+arcbase: /archive/u/wrmccart/
+startdate: 20150721 000000
+enddate:  20150722 000000
+
+scratch_dir: /discover/nobackup/wrmccart/scratch/
+output_dir: /discover/nobackup/wrmccart/radmon_out
+
+#optional:
+#mstorage: /discover/nobackup/wrmccart/x0016_cld/run/mstorage.arc
