@@ -169,14 +169,16 @@ plot2:
         x: {label: null, ticks: 6}
         y: {label: null, ticks: 5}
       data:
-        colors: [blue, red]
+        colors: [blue, red, green]
         labels: ['All Obs
 
-            %AVERAGE%', 'Used Obs
+            %AVERAGE%', 'Used Obs (ges)
+
+            %AVERAGE%', 'Used Obs (anl)
 
             %AVERAGE%']
         x: timestamp
-        y: [ges|#total obs, ges|#assim obs]
+        y: [ges|#total obs, ges|#assim obs, anl|#assim obs]
       legend: {border: false, line: true, title: null}
       title: Number of Radiance
   - subplot2_id:
