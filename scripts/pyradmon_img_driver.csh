@@ -25,6 +25,15 @@ set pyradmon_path=`$ESMADIR/Linux/bin/echorc.x -rc $rcfile pyradmon`
 set startdate=`$ESMADIR/Linux/bin/echorc.x -rc $rcfile startdate`
 set enddate=`$ESMADIR/Linux/bin/echorc.x -rc $rcfile enddate`
 
+set rename_date_dir=`$ESMADIR/Linux/bin/echorc.x -rc $rcfile rename_date_dir`
+if ($status != 0) set rename_date_dir=/dev/null
+
+set scp_userhost=`$ESMADIR/Linux/bin/echorc.x -rc $rcfile scp_userhost`
+if ($status != 0) set scp_userhost=/dev/null
+set scp_path=`$ESMADIR/Linux/bin/echorc.x -rc $rcfile scp_path`
+if ($status != 0) set scp_path=/dev/null
+
+
 
 set data_dirbase=$expbase/$expid
 set startdate=$startdate[1]
@@ -36,9 +45,11 @@ echo $data_dirbase
 
 echo "Determining instruments for $expid from $startdate to $enddate.  This "
 echo "  may take a while..."
-set insts=`$pyradmon_path/scripts/determine_inst.csh $data_dirbase $startdate $enddate`
-echo $pyradmon_path/scripts/determine_inst.csh $data_dirbase $startdate $enddate
-
+set insts=`$ESMADIR/Linux/bin/echorc.x -rc $rcfile instruments`
+if ($status != 0) then
+   set insts=`$pyradmon_path/scripts/determine_inst.csh $data_dirbase $startdate $enddate`
+   echo $pyradmon_path/scripts/determine_inst.csh $data_dirbase $startdate $enddate
+endif
 set syyyy = `echo $startdate |cut -b1-4`
 set smm   = `echo $startdate |cut -b5-6`
 set sdd   = `echo $startdate |cut -b7-8`
@@ -77,6 +88,14 @@ end
 
 
 cd $output_dir
+
+if ($rename_date_dir != '/dev/null') mv $expid/$startdate-$enddate $expid/$rename_date_dir
+
 tar cvf $expid.tar $expid/
 
 rm -rf $expid/
+
+if ($scp_userhost != '/dev/null' && $scp_path != '/dev/null') then 
+   scp $expid.tar $scp_userhost\:$scp_path
+   ssh $scp_userhost "cd $scp_path ; tar xvf $expid.tar"
+endif

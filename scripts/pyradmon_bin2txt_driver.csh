@@ -4,6 +4,11 @@ source radmon_process.config
 
 set exprc=$argv[1]
 
+set startdir=`pwd`
+mkdir -p work.$exprc
+cp $exprc work.$exprc
+cd work.$exprc
+
 unset argv
 setenv argv
 
@@ -27,7 +32,13 @@ set   enddate=`$echorc -rc $exprc enddate`
 set  pyradmon=`$echorc -rc $exprc pyradmon`
 
 set bin2txt=$pyradmon/gsidiag/gsidiag_bin2txt/gsidiag_bin2txt.x
+set bin2txt_exec=`$echorc -rc $exprc bin2txt_exec`
+if ($status == 0) set bin2txt=$bin2txt_exec
+
 set bin2txtnl=$pyradmon/gsidiag/gsidiag_bin2txt/gsidiag_bin2txt.nl
+set bin2txtnl_input=`$echorc -rc $exprc bin2txt_nl`
+if ($status == 0) set bin2txtnl=$bin2txtnl_input 
+echo $bin2txtnl
 
 set ndstartdate=`echo $startdate[1]``echo $startdate[2] |cut -b1-2`
 set    ndenddate=`echo $enddate[1]``echo $enddate[2] |cut -b1-2`
@@ -36,8 +47,12 @@ set mstorage=`$echorc -rc $exprc mstorage`
 
 if ($status) set mstorage=$expbase/$expid/run/mstorage.arc
 
+set insts=`$echorc -rc $exprc instruments`
+if ($status == 0) set sats=($insts)
+
 ln -sf $bin2txtnl .
 
+echo $expid $insts
 while ($ndstartdate <= $ndenddate)
    set arcfiles=''
    set expfiles=''
@@ -51,6 +66,7 @@ while ($ndstartdate <= $ndenddate)
         set cfileexp=`$echorc -template $expid $startdate -fill $tmpl`
         if (-e $cfilearc) then
            set cfileout=`echo $cfileexp | sed 's/bin$/txt/'`
+           mkdir -p `dirname $cfileout`
            echo asdf $cfileout
            if (! -e $cfileout) then
               set arcfiles=($arcfiles $cfilearc) 
@@ -62,7 +78,11 @@ while ($ndstartdate <= $ndenddate)
       end
    end
 
-   dmget $arcfiles
+   echo dmgetting arcfiles $arcfiles
+
+   if ("$arcfiles" != "" ) dmget $arcfiles
+
+   echo processing expfiles
 
    foreach cfile ($expfiles)
       set cfileout=`echo $cfile | sed 's/bin$/txt/'`
@@ -71,13 +91,14 @@ while ($ndstartdate <= $ndenddate)
       rm $cfile
    end
 
+   echo ticking
    set ndstartdate=`ndate +06 $ndstartdate`
    set startdate=( `echo $ndstartdate |cut -b1-8` `echo $ndstartdate |cut -b9-10`0000)
 
 end
 
-rm `basename $bin2txtnl`
-
+cd $startdir
+rm -rf work.$exprc/*
 
 
 
