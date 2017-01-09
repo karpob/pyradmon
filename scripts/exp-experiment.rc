@@ -16,3 +16,4 @@ output_dir: /discover/nobackup/wrmccart/radmon_out
 #bin2txt_nl: /discover/nobackup/wrmccart/MERRA2/radmon_diag_bin2txt.nl
 #scp_userhost: wrmccart@polar
 #scp_path: /www/html/intranet/personnel/wmccarty/radmon_out/radmon_data/
+#gsidiagsrc: /path/to/modified/gsidiags.rc #otherwise, this uses ESMADIR/Linux/etc/gsidiags.rc

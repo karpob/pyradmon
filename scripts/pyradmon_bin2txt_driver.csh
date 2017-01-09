@@ -22,14 +22,18 @@ source $ESMADIR/src/g5_modules
 
 set echorc=$ESMADIR/Linux/bin/echorc.x
 
-set sats=`$echorc -rc $ESMADIR/Linux/etc/gsidiags.rc satlist`
-
 set     expid=`$echorc -rc $exprc expid`
 set   expbase=`$echorc -rc $exprc expbase`
 set   arcbase=`$echorc -rc $exprc arcbase`
 set startdate=`$echorc -rc $exprc startdate`
 set   enddate=`$echorc -rc $exprc enddate`
 set  pyradmon=`$echorc -rc $exprc pyradmon`
+
+set gsidiagsrc=$ESMADIR/Linux/etc/gsidiags.rc
+set gsidiagsrc_input=`$echorc -rc $exprc gsidiagsrc`
+if ($status == 0) set gsidiagsrc=$gsidiagsrc_input
+
+set sats=`$echorc -rc $ESMADIR/Linux/etc/gsidiags.rc satlist`
 
 set bin2txt=$pyradmon/gsidiag/gsidiag_bin2txt/gsidiag_bin2txt.x
 set bin2txt_exec=`$echorc -rc $exprc bin2txt_exec`
