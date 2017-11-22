@@ -37,12 +37,11 @@ set sats=`$echorc -rc $ESMADIR/Linux/etc/gsidiags.rc satlist`
 
 set bin2txt=$pyradmon/gsidiag/gsidiag_bin2txt/gsidiag_bin2txt.x
 set bin2txt_exec=`$echorc -rc $exprc bin2txt_exec`
-if ($status == 0) set bin2txt=$bin2txt_exec
+if ($status == 0) set bin2txt="$bin2txt_exec"
 
 set bin2txtnl=$pyradmon/gsidiag/gsidiag_bin2txt/gsidiag_bin2txt.nl
 set bin2txtnl_input=`$echorc -rc $exprc bin2txt_nl`
 if ($status == 0) set bin2txtnl=$bin2txtnl_input 
-echo $bin2txtnl
 
 set ndstartdate=`echo $startdate[1]``echo $startdate[2] |cut -b1-2`
 set    ndenddate=`echo $enddate[1]``echo $enddate[2] |cut -b1-2`
@@ -57,6 +56,8 @@ if ($status == 0) set sats=($insts)
 ln -sf $bin2txtnl .
 
 echo $expid $insts
+echo bin2txt: $bin2txt
+
 while ($ndstartdate <= $ndenddate)
    set arcfiles=''
    set expfiles=''
