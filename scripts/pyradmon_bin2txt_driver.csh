@@ -33,7 +33,8 @@ set gsidiagsrc=$ESMADIR/Linux/etc/gsidiags.rc
 set gsidiagsrc_input=`$echorc -rc $exprc gsidiagsrc`
 if ($status == 0) set gsidiagsrc=$gsidiagsrc_input
 
-set sats=`$echorc -rc $ESMADIR/Linux/etc/gsidiags.rc satlist`
+#set sats=`$echorc -rc $ESMADIR/Linux/etc/gsidiags.rc satlist`
+set sats=`$echorc -rc $gsidiagsrc satlist`
 
 set bin2txt=$pyradmon/gsidiag/gsidiag_bin2txt/gsidiag_bin2txt.x
 set bin2txt_exec=`$echorc -rc $exprc bin2txt_exec`
