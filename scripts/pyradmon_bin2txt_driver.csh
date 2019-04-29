@@ -98,7 +98,13 @@ while ($ndstartdate <= $ndenddate)
    end
 
    echo ticking
-   set ndstartdate=`ndate +06 $ndstartdate`
+   # replace ndate with more commonly available date
+
+   #simulate ndate using csh and unix date instead.
+   set hr=( `echo $ndstartdate | cut -c9-12` )
+   set yyyymmdd=( `echo $ndstartdate | cut -c1-8` )
+   set ndstartdate=(`date +"%Y%m%d%H" -d $yyyymmdd' '$hr':00 6 hour'`)
+   #set ndstartdate=`ndate +06 $ndstartdate`
    set startdate=( `echo $ndstartdate |cut -b1-8` `echo $ndstartdate |cut -b9-10`0000)
 
 end
