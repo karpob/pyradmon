@@ -106,7 +106,6 @@ while ($ndstartdate <= $ndenddate)
    set yyyymmdd=( `echo $ndstartdate | cut -c1-8` )
    #set ndstartdate=`ndate +06 $ndstartdate`
    set ndstartdate=(`date -u +"%Y%m%d%H" -d "$yyyymmdd ${hr}:00:00 UTC + 6 hours"`)
-   echo $ndstartdate 
    set startdate=( `echo $ndstartdate |cut -b1-8` `echo $ndstartdate |cut -b9-10`0000)
 end
 
